@@ -1,4 +1,7 @@
 datasets/
 logs/
 *.pyc
+.venv
 .DS_Store
+*.swp
+*.ipynb
