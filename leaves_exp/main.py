@@ -16,13 +16,26 @@ from dataset import Dataset
 from data_utils import load_data
 
 #tf.logging.set_verbosity(tf.logging.INFO)
-ex = Experiment('sacred_test')
+ex = Experiment("test")
 LOGS_DIRECTORY = os.environ.get('LOGS_DIRECTORY', 'logs/')
 DATA_DIRECTORY = os.environ.get('DATA_DIRECTORY', './datasets/')
 
 
 @ex.config
 def config():
+    flags = {
+        'seed':42,
+        'model_dir':'logs/',
+        'dataset':'./datasets/train.csv',
+        'num_epochs':200,
+        'learning_rate':1e-3,
+        'learning_rate_decay_rate':0.1,
+        'learning_rate_decay_steps':6000,
+        'early_stopping_rounds':10,
+    }
+
+@ex.named_config
+def backup():
     #move flags here
     seed = 42
     model_dir = 'logs/'
@@ -43,7 +56,6 @@ def config():
         'learning_rate_decay_steps':6000,
         'early_stopping_rounds':10,
     }
-
 #FLAGS = tf.app.flags.FLAGS
 
 #Create Flags here as needed
@@ -58,10 +70,9 @@ def config():
 #tf.app.flags.DEFINE_float('learning_rate_decay_steps', 6000, 'Learning rate decay steps.')
 #tf.app.flags.DEFINE_integer('early_stopping_rounds', 10, 'Number of epochs before early stopping.')
 
-#@ex.automain
-#def run(flags):
 @ex.automain
 def main(flags):
+    print("Printing num epochs: {}".format(flags["num_epochs"]))
     random.seed(flags["seed"])
     np.random.seed(flags["seed"])
 
