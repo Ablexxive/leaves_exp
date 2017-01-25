@@ -19,8 +19,7 @@ class Dataset(object):
 
     @property
     def steps_per_epoch(self):
-    #change = examples / batch_size
-        return self.batch_size * self.examples_per_epoch
+        return self.batch_size / self.examples_per_epoch
 
     def get_input_fn(self, name,  num_epochs, shuffle):
     #a function that takes no argument and returns a tuple of (features, labels), where features is a dict of string key to Tensor and labels is a Tensor that's currently not used (and so can be None).
