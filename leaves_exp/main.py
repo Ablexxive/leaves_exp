@@ -10,13 +10,17 @@ import numpy as np
 import tensorflow as tf
 
 from sacred import Experiment
-
+from sacred.observers import MongoObserver
+#from sacred.observers import FileStorageObserver 
 from model import model_fn
 from dataset import Dataset
 from data_utils import load_data
 
 #tf.logging.set_verbosity(tf.logging.INFO)
 ex = Experiment("test")
+ex.observers.append(MongoObserver.create(url='localhost:27017',
+                                            db_name='sacred'))
+#ex.observers.append(FileStorageObserver.create('my_runs'))
 LOGS_DIRECTORY = os.environ.get('LOGS_DIRECTORY', 'logs/')
 DATA_DIRECTORY = os.environ.get('DATA_DIRECTORY', './datasets/')
 
@@ -27,7 +31,7 @@ def config():
         'seed':42,
         'model_dir':'logs/',
         'dataset':'./datasets/train.csv',
-        'num_epochs':200,
+        'num_epochs':50,
         'learning_rate':1e-3,
         'learning_rate_decay_rate':0.1,
         'learning_rate_decay_steps':6000,
@@ -87,10 +91,10 @@ def main(flags):
 
     #create session and run to test that features/labeles are read in properly  
     features, labels = train_input_fn() #this line is for testing, remove
-    print("Features!")
-    print(features)
-    print("Labels!")
-    print(labels) 
+    #print("Features!")
+    #print(features)
+    #print("Labels!")
+   # print(labels) 
     params = {
         'learning_rate': flags["learning_rate"],
         'learning_rate_decay_rate': flags["learning_rate_decay_rate"],
